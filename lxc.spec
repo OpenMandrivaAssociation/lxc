@@ -1,7 +1,7 @@
 %define libname %mklibname %name 0
 
 Name:           lxc
-Version:        0.6.5
+Version:        0.7.1
 Release:        %mkrel 1
 Summary:        Linux Resource Containers
 
@@ -9,8 +9,6 @@ Group:          System/Kernel and hardware
 License:        LGPLv2+
 URL:            http://lxc.sourceforge.net
 Source0:        http://lxc.sourceforge.net/download/lxc/%{name}-%{version}.tar.gz
-# Patch submitted in bug ID #2954017
-Patch0:         lxc-0.6.5-fix-sys-stat.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  automake
@@ -57,7 +55,6 @@ This package contains documentation for %{name}.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 ./autogen.sh
@@ -79,7 +76,7 @@ find %{buildroot} -name '*.la' -delete
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
 %{_bindir}/%{name}-*
-%{_libexecdir}/%{name}-init
+%{_libexecdir}/lxc
 %{_mandir}/man*/%{name}*
 %{_sharedstatedir}/%{name}
 

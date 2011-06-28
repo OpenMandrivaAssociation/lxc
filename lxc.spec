@@ -48,7 +48,7 @@ developing applications that use %{name}.
 
 %package        doc
 Summary:        Documentation for %{name}
-Group:          Documentation
+Group:		Books/Other 
 Requires:       %{name} = %{version}
 
 %description    doc

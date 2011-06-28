@@ -1,7 +1,7 @@
 %define libname %mklibname %name 0
 
 Name:           lxc
-Version:        0.7.1
+Version:        0.7.4.2
 Release:        %mkrel 1
 Summary:        Linux Resource Containers
 
@@ -16,6 +16,7 @@ BuildRequires:  docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:  libcap-devel
 BuildRequires:  libtool
+Buildrequires:	docbook-dtd30-sgml
 
 %description
 Linux Resource Containers provide process and resource isolation without the

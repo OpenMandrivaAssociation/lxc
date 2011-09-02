@@ -1,7 +1,7 @@
 %define libname %mklibname %name 0
 
 Name:           lxc
-Version:        0.7.4.2
+Version:        0.7.5
 Release:        %mkrel 1
 Summary:        Linux Resource Containers
 

@@ -2,14 +2,13 @@
 
 Name:           lxc
 Version:        0.7.5
-Release:        %mkrel 1
+Release:        2
 Summary:        Linux Resource Containers
 
 Group:          System/Kernel and hardware
 License:        LGPLv2+
 URL:            http://lxc.sourceforge.net
 Source0:        http://lxc.sourceforge.net/download/lxc/%{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  automake
 BuildRequires:  docbook-utils
@@ -69,9 +68,6 @@ This package contains documentation for %{name}.
 %{__make} DESTDIR=%{buildroot} install
 find %{buildroot} -name '*.la' -delete
 %{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
-
-%clean
-%{__rm} -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)

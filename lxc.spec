@@ -73,9 +73,9 @@ find %{buildroot} -name '*.la' -delete
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
 %{_bindir}/%{name}-*
-%{_libexecdir}/lxc
+%{_libexecdir}/%{name}
 %{_mandir}/man*/%{name}*
-%{_sharedstatedir}/%{name}
+%{_localstatedir}/lib/%{name}
 
 %files -n %libname
 %defattr(-,root,root,-)

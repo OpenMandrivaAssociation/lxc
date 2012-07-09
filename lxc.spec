@@ -9,6 +9,7 @@ Group:          System/Kernel and hardware
 License:        LGPLv2+
 URL:            http://lxc.sourceforge.net
 Source0:        http://lxc.sourceforge.net/download/lxc/%{name}-%{version}.tar.gz
+Patch0:		lxc-0.7.5-handle-automake-pkglib.patch
 
 BuildRequires:  automake
 BuildRequires:  docbook-utils
@@ -47,6 +48,7 @@ developing applications that use %{name}.
 
 %prep
 %setup -q
+%patch0 -p1 -b .pkglib~
 
 %build
 ./autogen.sh

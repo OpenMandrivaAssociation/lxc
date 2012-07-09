@@ -2,7 +2,7 @@
 
 Name:           lxc
 Version:        0.7.5
-Release:        2
+Release:        3
 Summary:        Linux Resource Containers
 
 Group:          System/Kernel and hardware
@@ -45,14 +45,6 @@ overhead of full virtualization.
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package        doc
-Summary:        Documentation for %{name}
-Group:		Books/Other 
-Requires:       %{name} = %{version}
-
-%description    doc
-This package contains documentation for %{name}.
-
 %prep
 %setup -q
 
@@ -67,7 +59,7 @@ This package contains documentation for %{name}.
 %{__rm} -rf %{buildroot}
 %{__make} DESTDIR=%{buildroot} install
 find %{buildroot} -name '*.la' -delete
-%{__mkdir} -p %{buildroot}%{_sharedstatedir}/%{name}
+%{__mkdir} -p %{buildroot}%{_localstatedir}/lib/%{name}
 
 %files
 %defattr(-,root,root,-)
@@ -79,17 +71,10 @@ find %{buildroot} -name '*.la' -delete
 
 %files -n %libname
 %defattr(-,root,root,-)
-%doc COPYING
 %{_libdir}/liblxc.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc COPYING
 %{_datadir}/pkgconfig/%{name}.pc
 %{_includedir}/*
 %{_libdir}/liblxc.so
-
-%files doc
-%defattr(-,root,root,-)
-%{_docdir}/%{name}
-

@@ -80,3 +80,27 @@ find %{buildroot} -name '*.la' -delete
 %{_datadir}/pkgconfig/%{name}.pc
 %{_includedir}/*
 %{_libdir}/liblxc.so
+
+
+%changelog
+* Mon Jul 09 2012 Bogdano Arendartchuk <bogdano@mandriva.com> 0.7.5-3
++ Revision: 808557
+- added workaround against incompatiblity of pkglib_PROGRAMS in newer
+  automake (based on lp#934950)
+- the doc package didn't have any real documentation, dropped it
+- lxc needs /var/lib/lxc
+- legacy cleanup (rpm5)
+
+* Fri Sep 02 2011 Bogdano Arendartchuk <bogdano@mandriva.com> 0.7.5-1
++ Revision: 697841
+- new version 0.7.5
+
+* Tue Jun 28 2011 Antoine Ginies <aginies@mandriva.com> 0.7.4.2-1
++ Revision: 687643
+- fix group for doc package
+- version 0.7.4.2
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - new release
+    - import lxc
+

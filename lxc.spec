@@ -30,6 +30,14 @@ Buildrequires:	lua-devel
 %if %{with python3}
 Buildrequires:	python3-devel
 %endif
+# needed for lxc-busybox
+Requires:       busybox
+# needed for lxc-debian
+Requires:       dpkg
+# needed for lxc-debian, lxc-ubuntu:
+Requires:       debootstrap rsync
+# needed for lxc-sshd
+Requires:       openssh-server dhclient
 
 Conflicts:   lxc-doc < 0.7.5
 Obsoletes:   lxc-doc < 0.7.5
@@ -115,7 +123,7 @@ make
 %{_libexecdir}/lxc/templates/*
 %dir %{_libexecdir}/lxc/rootfs
 %{_libexecdir}/lxc/rootfs/README
-%{_mandir}/man*/%{name}*
+#{_mandir}/man*/%{name}*
 /etc/lxc/default.conf
 %_datadir/lxc
 

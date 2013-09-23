@@ -1,106 +1,142 @@
-%define libname %mklibname %name 0
+%define major 0
+%define libname %mklibname lxc %{major}
+%define develname %mklibname lxc -d
+%define debugcflags	%nil
+%define	debug_package	%nil
 
-Name:           lxc
-Version:        0.7.5
-Release:        3
-Summary:        Linux Resource Containers
+%define luaver 5.1
+%define lualibdir %{_libdir}/lua/%{luaver}
+%define luapkgdir %{_datadir}/lua/%{luaver}
+%bcond_without	lua
+%bcond_with	python3
 
-Group:          System/Kernel and hardware
-License:        LGPLv2+
-URL:            http://lxc.sourceforge.net
-Source0:        http://lxc.sourceforge.net/download/lxc/%{name}-%{version}.tar.gz
-Patch0:		lxc-0.7.5-handle-automake-pkglib.patch
-
-BuildRequires:  automake
-BuildRequires:  docbook-utils
+Name:		lxc
+Version:	0.9.0
+Release:	1
+Summary:	Linux Containers
+URL:		http://lxc.sourceforge.net
+Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
+Group:		System/Kernel and hardware
+License:	LGPLv2
+Epoch:		1
+Patch0:		lxc-0.9.0-fedora-template.patch
+BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
-BuildRequires:  libcap-devel
-BuildRequires:  libtool
+BuildRequires:	libcap-devel
 Buildrequires:	docbook-dtd30-sgml
+%if %{with lua}
+Buildrequires:	lua-devel
+%endif
+%if %{with python3}
+Buildrequires:	python3-devel
+%endif
+
+Conflicts:   lxc-doc < 0.7.5
+Obsoletes:   lxc-doc < 0.7.5
 
 %description
-Linux Resource Containers provide process and resource isolation without the
-overhead of full virtualization.
+The package "%{name}" provides the command lines to create and manage
+containers.  It contains a full featured container with the isolation
+/ virtualization of the pids, the ipc, the utsname, the mount points,
+/proc, /sys, the network and it takes into account the control groups.
+It is very light, flexible, and provides a set of tools around the
+container like the monitoring with asynchronous events notification,
+or the freeze of the container. This package is useful to create
+Virtual Private Server, or to run isolated applications like bash or
+sshd.
 
-%package        -n %libname
-Summary:        Runtime library files for %{name}
+%package -n	%{libname}
+Summary:	Library for LXC
+Group:		System/Libraries
+
+%description -n %{libname}
+Library for the Linux Kernel Containers.
+
+%package -n	%{develname}
+Summary:	Development files for LXC
+Group:		Development/C
+
+%description -n %{develname}
+Developement files for the Linux Kernel Containers.
+
+%if %{with lua}
+%package        -n lua-%{name}
+Summary:        Lua binding for %{name}
 Group:          System/Libraries
-Requires:       %{name} = %{version}
+Requires:       lua-filesystem
 
-%description    -n %libname
+%description    -n lua-%{name}
 Linux Resource Containers provide process and resource isolation without the
 overhead of full virtualization.
 
-This package contains libraries for running %{name} applications.
+The lua-%{name} package contains the Lua binding for %{name}.
+%endif
 
-%package        devel
-Summary:        Development files for %{name}
-Group:          Development/C
-Requires:       %{name} = %{version}
-Requires:       pkgconfig
+%if %{with python3}
+%package        -n python3-%{name}
+Summary:        Python binding for %{name}
+Group:          System Environment/Libraries
 
-%description    devel
+%description    -n python3-%{name}
 Linux Resource Containers provide process and resource isolation without the
 overhead of full virtualization.
 
-The %{name}-devel package contains libraries and header files for
-developing applications that use %{name}.
+The python3-%{name} package contains the Python3 binding for %{name}.
+%endif
 
 %prep
 %setup -q
-%patch0 -p1 -b .pkglib~
+%apply_patches
 
 %build
-./autogen.sh
-%configure F77=no
-# Fix binary-or-shlib-defines-rpath error
-%{__sed} -i '/AM_LDFLAGS = -Wl,-E -Wl,-rpath -Wl,$(libdir)/d' src/lxc/Makefile.in
-%{__make} %{?_smp_mflags}
+%configure2_5x  F77=no \
+		--disable-apparmor \
+		--with-distro=mandriva \
+%if %{with lua}
+		--enable-lua \
+%endif
+%if %{with python3}
+		--enable-python \
+%endif
+
+# remove rpath ( rpmlint error )
+sed -i '/AM_LDFLAGS = -Wl,-E -Wl,-rpath -Wl,$(libdir)/d' src/lxc/Makefile.in
+make
 
 %install
-%{__rm} -rf %{buildroot}
-%{__make} DESTDIR=%{buildroot} install
-find %{buildroot} -name '*.la' -delete
-%{__mkdir} -p %{buildroot}%{_localstatedir}/lib/%{name}
+%makeinstall_std templatesdir=%{_libexecdir}/lxc/templates READMEdir=%{_libexecdir}/lxc/rootfs
 
 %files
-%defattr(-,root,root,-)
-%doc AUTHORS COPYING README
-%{_bindir}/%{name}-*
-%{_libexecdir}/%{name}
+%doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
+%{_bindir}/lxc-*
+%dir %{_libexecdir}/lxc
+%{_libexecdir}/lxc/lxc-init
+%dir %{_libexecdir}/lxc/templates
+%{_libexecdir}/lxc/templates/*
+%dir %{_libexecdir}/lxc/rootfs
+%{_libexecdir}/lxc/rootfs/README
 %{_mandir}/man*/%{name}*
-%{_localstatedir}/lib/%{name}
+/etc/lxc/default.conf
+%_datadir/lxc
 
-%files -n %libname
-%defattr(-,root,root,-)
-%{_libdir}/liblxc.so.*
+%files -n %{libname}
+%doc COPYING
+%{_libdir}/lib%{name}.so.%{major}
+%{_libdir}/lib%{name}.so.%{major}.*
 
-%files devel
-%defattr(-,root,root,-)
-%{_datadir}/pkgconfig/%{name}.pc
-%{_includedir}/*
-%{_libdir}/liblxc.so
+%files -n %{develname}
+%doc COPYING
+%{_includedir}/%{name}/*.h
+%{_libdir}/lib%{name}.so
+%{_libdir}/pkgconfig/%{name}.pc
 
+%if %{with lua}
+%files -n lua-%{name}
+%{lualibdir}/%{name}
+%{luapkgdir}/%{name}.lua
+%endif
 
-%changelog
-* Mon Jul 09 2012 Bogdano Arendartchuk <bogdano@mandriva.com> 0.7.5-3
-+ Revision: 808557
-- added workaround against incompatiblity of pkglib_PROGRAMS in newer
-  automake (based on lp#934950)
-- the doc package didn't have any real documentation, dropped it
-- lxc needs /var/lib/lxc
-- legacy cleanup (rpm5)
-
-* Fri Sep 02 2011 Bogdano Arendartchuk <bogdano@mandriva.com> 0.7.5-1
-+ Revision: 697841
-- new version 0.7.5
-
-* Tue Jun 28 2011 Antoine Ginies <aginies@mandriva.com> 0.7.4.2-1
-+ Revision: 687643
-- fix group for doc package
-- version 0.7.4.2
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - new release
-    - import lxc
-
+%if %{with python3}
+%files -n python3-%{name}
+%{python3_sitearch}/*
+%endif

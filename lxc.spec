@@ -12,7 +12,7 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	2
+Release:	3
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
@@ -114,20 +114,18 @@ sed -i '/AM_LDFLAGS = -Wl,-E -Wl,-rpath -Wl,$(libdir)/d' src/lxc/Makefile.in
 make
 
 %install
-%makeinstall_std templatesdir=%{_libexecdir}/lxc/templates READMEdir=%{_libexecdir}/lxc/rootfs
+%makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libexecdir}/lxc/rootfs
 
 %files
 %doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
 %{_bindir}/lxc-*
-%dir %{_libexecdir}/lxc
 %{_libexecdir}/lxc/lxc-init
-%dir %{_libexecdir}/lxc/templates
-%{_libexecdir}/lxc/templates/*
-%dir %{_libexecdir}/lxc/rootfs
+%{_datadir}/lxc/templates/*
+%{_datadir}/lxc/hooks/*
 %{_libexecdir}/lxc/rootfs/README
-#{_mandir}/man*/%{name}*
+%{_mandir}/man*/%{name}*
+%{_datadir}/%{name}/%{name}.functions
 /etc/lxc/default.conf
-%_datadir/lxc
 
 %files -n %{libname}
 %doc COPYING

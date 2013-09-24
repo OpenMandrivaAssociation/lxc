@@ -123,7 +123,7 @@ make
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
 %{_libexecdir}/lxc/rootfs/README
-%{_mandir}/man*/%{name}*
+#% {_mandir}/man*/%{name}*
 %{_datadir}/%{name}/%{name}.functions
 /etc/lxc/default.conf
 

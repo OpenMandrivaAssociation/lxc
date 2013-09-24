@@ -12,7 +12,7 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	1
+Release:	2
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
@@ -22,7 +22,7 @@ Epoch:		1
 Patch0:		lxc-0.9.0-fedora-template.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
-BuildRequires:	libcap-devel
+BuildRequires:	cap-devel
 Buildrequires:	docbook-dtd30-sgml
 %if %{with lua}
 Buildrequires:	lua-devel
@@ -37,7 +37,9 @@ Requires:       dpkg
 # needed for lxc-debian, lxc-ubuntu:
 Requires:       debootstrap rsync
 # needed for lxc-sshd
-Requires:       openssh-server dhclient
+Requires:       openssh-server
+# bridge
+Requires:       bridge-utils
 
 Conflicts:   lxc-doc < 0.7.5
 Obsoletes:   lxc-doc < 0.7.5

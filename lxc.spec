@@ -25,6 +25,7 @@ BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel
 Buildrequires:	docbook-dtd30-sgml
+Buildrequires:	docbook2x
 %if %{with lua}
 Buildrequires:	lua-devel
 %endif
@@ -100,6 +101,7 @@ The python3-%{name} package contains the Python3 binding for %{name}.
 %apply_patches
 
 %build
+autoreconf -fiv
 %configure2_5x  F77=no \
 		--disable-apparmor \
 		--with-distro=mandriva \

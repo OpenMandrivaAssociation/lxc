@@ -20,6 +20,7 @@ Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
 Patch0:		lxc-0.9.0-fedora-template.patch
+Patch1:		0001-Add-an-OpenMandriva-LX-template.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel
@@ -125,7 +126,7 @@ mkdir -p %{buildroot}/var/lib/%{name}
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
 %{_libexecdir}/lxc/rootfs/README
-#% {_mandir}/man*/%{name}*
+%{_mandir}/man*/%{name}*
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
 /etc/lxc/default.conf

@@ -110,6 +110,7 @@ index 0000000..1f4e2e4
 +distro=cooker
 +arch=$(uname -m)
 +cache_base=/var/cache/lxc/openmandriva/$arch
++default_path=@LXCPATH@
 +default_profile=default
 +root_password=root
 +lxc_network_type=veth

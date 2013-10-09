@@ -1,14 +1,14 @@
-From 05f634bae5fafb0249f8cf02311c52a27dcedd65 Mon Sep 17 00:00:00 2001
+From e902888d11b31c004ad87374b7fc990e41ceef12 Mon Sep 17 00:00:00 2001
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Tue, 8 Oct 2013 13:39:10 +0000
+Date: Wed, 9 Oct 2013 09:37:10 +0000
 Subject: [PATCH] Add an OpenMandriva LX template
 
 ---
  configure.ac                  |   1 +
  templates/Makefile.am         |   1 +
  templates/Makefile.in         |   7 +-
- templates/lxc-openmandriva.in | 437 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 444 insertions(+), 2 deletions(-)
+ templates/lxc-openmandriva.in | 450 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 457 insertions(+), 2 deletions(-)
  create mode 100644 templates/lxc-openmandriva.in
 
 diff --git a/configure.ac b/configure.ac
@@ -76,10 +76,10 @@ index c61c3b4..a3301a5 100644
  lxc-altlinux: $(top_builddir)/config.status $(srcdir)/lxc-altlinux.in
 diff --git a/templates/lxc-openmandriva.in b/templates/lxc-openmandriva.in
 new file mode 100644
-index 0000000..1f4e2e4
+index 0000000..2f03445
 --- /dev/null
 +++ b/templates/lxc-openmandriva.in
-@@ -0,0 +1,437 @@
+@@ -0,0 +1,450 @@
 +#!/bin/bash
 +
 +#
@@ -91,6 +91,8 @@ index 0000000..1f4e2e4
 +
 +# Authors:
 +# Alexander Khryukin <alexander@mezon.ru>
++# Vokhmin Alexey V   <avokhmin@gmail.com>
++
 +
 +# This library is free software; you can redistribute it and/or
 +# modify it under the terms of the GNU Lesser General Public
@@ -107,8 +109,7 @@ index 0000000..1f4e2e4
 +# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 +
 +#Configurations
-+distro=cooker
-+arch=$(uname -m)
++hostarch=$(uname -m)
 +cache_base=@LOCALSTATEDIR@/cache/lxc/openmandriva/$arch
 +default_path=@LXCPATH@
 +default_profile=default
@@ -197,7 +198,7 @@ index 0000000..1f4e2e4
 +    PKG_LIST="basesystem-minimal locales locales-en initscripts urpmi cronie dhcp-client"
 +    # download a mini openmandriva into a cache
 +    echo "Downloading openmandriva minimal ..."
-+    URPMI="/usr/sbin/urpmi.addmedia --urpmi-root $INSTALL_ROOT main http://abf.rosalinux.ru/downloads/$distro/repository/$arch/main/release"
++    URPMI="/usr/sbin/urpmi.addmedia --urpmi-root $INSTALL_ROOT main http://abf.rosalinux.ru/downloads/$release/repository/$arch/main/release"
 +    echo $URPMI
 +    URPMI_BASE="/usr/sbin/urpmi --no-suggests --no-verify-rpm --ignorearch --root $INSTALL_ROOT --urpmi-root $INSTALL_ROOT --auto $PKG_LIST"
 +    $URPMI
@@ -365,7 +366,7 @@ index 0000000..1f4e2e4
 +        echo -n "Purging the download cache for OpenMandriva-$release..."
 +        rm --preserve-root --one-file-system -rf $cache && echo "Done." || exit 1
 +        exit 0
-+    ) 200>/var/lock/subsys/lxc-openmandriva
++    ) 200>@LOCALSTATEDIR@/lock/subsys/lxc-openmandriva
 +}
 +
 +usage()
@@ -373,7 +374,7 @@ index 0000000..1f4e2e4
 +    cat <<EOF
 +usage:
 +    $1 -n|--name=<container_name>
-+        [-p|--path=<path>] [-c|--clean] [-R|--release=<OpenMandriva/Rosa release>]
++        [-p|--path=<path>] [-c|--clean] [-R|--release=<openmandriva2013.0/rosa2012.1/cooker/ release>]
 +        [-4|--ipv4=<ipv4 address>] [-6|--ipv6=<ipv6 address>]
 +        [-g|--gw=<gw address>] [-d|--dns=<dns address>]
 +        [-P|--profile=<name of the profile>] [--rootfs=<path>]
@@ -382,28 +383,41 @@ index 0000000..1f4e2e4
 +Mandatory args:
 +  -n,--name         container name, used to as an identifier for that container from now on
 +Optional args:
-+  -p,--path         path to where the container rootfs will be created, defaults to @LXCPATH@. The container config will go under @LXCPATH@ in that case
++  -p,--path         path to where the container rootfs will be created, defaults to @LOCALSTATEDIR@/lib/lxc. The container config will go under @LOCALSTATEDIR@/lib/lxc in that case
 +  -c,--clean        clean the cache
-+  -R,--release      OpenMandriva/Rosa release for the new container. if the host is OpenMandriva, then it will default to the host's release.
++  -R,--release      openmandriva2013.0/cooker/rosa2012.1 release for the new container. if the host is OpenMandriva, then it will default to the host's release.
 +  -4,--ipv4         specify the ipv4 address to assign to the virtualized interface, eg. 192.168.1.123/24
 +  -6,--ipv6         specify the ipv6 address to assign to the virtualized interface, eg. 2003:db8:1:0:214:1234:fe0b:3596/64
 +  -g,--gw           specify the default gw, eg. 192.168.1.1
 +  -G,--gw6          specify the default gw, eg. 2003:db8:1:0:214:1234:fe0b:3596
 +  -d,--dns          specify the DNS server, eg. 192.168.1.2
 +  -P,--profile      Profile name is the file name in /etc/lxc/profiles contained packages name for install to cache.
-+  -A,--arch         NOT USED YET. Define what arch the container will be [i686,x86_64]
++  -A,--arch         Define what arch the container will be [i586,x86_64,armv7l,armv7hl]
 +  ---rootfs         rootfs path
 +  -h,--help         print this help
 +EOF
 +    return 0
 +}
 +
-+options=$(getopt -o hp:n:P:cR:4:6:g:d: -l help,rootfs:,path:,name:,profile:,clean,release:ipv4:ipv6:gw:dns: -- "$@")
++options=$(getopt -o hp:n:P:cR:4:6:g:d:A -l help,rootfs:,path:,name:,profile:,clean:,release:,ipv4:,ipv6:,gw:,dns:,arch: -- "$@")
 +if [ $? -ne 0 ]; then
 +    usage $(basename $0)
 +    exit 1
 +fi
 +eval set -- "$options"
++
++release=${release:-"cooker"} 
++if [ -f /etc/lsb-release ]; then
++    . /etc/lsb-release
++    if [ "$DISTRIB_ID" = "OpenMandrivaLinux" ]; then
++        release=openmandriva2013.0
++    elif [ "$DISTRIB_ID" = "RosaDesktop.Fresh" ]; then
++	release=rosa2012.1
++    else
++	echo "This is not an OpenMandriva or ROSA release"
++        exit 1
++    fi
++fi
 +
 +while true
 +do
@@ -415,6 +429,7 @@ index 0000000..1f4e2e4
 +        -P|--profile)   profile=$2; shift 2;;
 +        -c|--clean)     clean=$2; shift 2;;
 +        -R|--release)   release=$2; shift 2;;
++	-a|--arch)      arch=$2; shift 2;;
 +        -4|--ipv4)      ipv4=$2; shift 2;;
 +        -6|--ipv6)      ipv6=$2; shift 2;;
 +        -g|--gw)        gw=$2; shift 2;;
@@ -423,6 +438,8 @@ index 0000000..1f4e2e4
 +        *)              break ;;
 +    esac
 +done
++
++arch=${arch:-$hostarch}
 +
 +if [ ! -z "$clean" -a -z "$path" ]; then
 +    clean || exit 1
@@ -443,15 +460,9 @@ index 0000000..1f4e2e4
 +    profile=$default_profile
 +fi
 +
-+if [ -z "$release" ]; then
-+    if [ "$distro" == "cooker" ]; then
-+	release="$distro"
-+    elif [ "$is_openmandriva" ]; then
-+	release=$(rpm --eval %product_version)
-+    else
-+	echo "This is not an OpenMandriva or ROSA release"
-+        exit 1
-+    fi
++if [ $hostarch = "i586" -a $arch = "x86_64" ]; then
++     echo "can't create x86_64 container on i586"
++     exit 1
 +fi
 +
 +if [ -z "$ipv4" -a -z "$ipv6" ]; then
@@ -517,7 +528,7 @@ index 0000000..1f4e2e4
 +    exit 0
 +fi
 +echo "container rootfs and config created"
-+echo "network configured as $lxc_network_type in the $lxc_network_link"
++
 -- 
 1.8.3.2
 

@@ -12,7 +12,7 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	10
+Release:	11
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz

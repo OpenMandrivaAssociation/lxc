@@ -1,14 +1,14 @@
-From 3615e6e7ba7ded94acc8cd4d560da409606eabad Mon Sep 17 00:00:00 2001
+From a61a74b1f63acdccfb6eb7efbefc6fee1e3af9a3 Mon Sep 17 00:00:00 2001
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Wed, 9 Oct 2013 10:39:51 +0000
+Date: Thu, 10 Oct 2013 14:33:22 +0000
 Subject: [PATCH] Add an OpenMandriva LX template
 
 ---
  configure.ac                  |   1 +
  templates/Makefile.am         |   1 +
  templates/Makefile.in         |   7 +-
- templates/lxc-openmandriva.in | 450 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 457 insertions(+), 2 deletions(-)
+ templates/lxc-openmandriva.in | 477 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 484 insertions(+), 2 deletions(-)
  create mode 100644 templates/lxc-openmandriva.in
 
 diff --git a/configure.ac b/configure.ac
@@ -76,10 +76,10 @@ index c61c3b4..a3301a5 100644
  lxc-altlinux: $(top_builddir)/config.status $(srcdir)/lxc-altlinux.in
 diff --git a/templates/lxc-openmandriva.in b/templates/lxc-openmandriva.in
 new file mode 100644
-index 0000000..0714573
+index 0000000..a0f0cad
 --- /dev/null
 +++ b/templates/lxc-openmandriva.in
-@@ -0,0 +1,450 @@
+@@ -0,0 +1,477 @@
 +#!/bin/bash
 +
 +#
@@ -151,6 +151,7 @@ index 0000000..0714573
 +
 +populate_dev()
 +{
++    echo -n "Create devices in /dev/"
 +    dev_path="${rootfs_path}/dev"
 +    rm -rf $dev_path
 +    mkdir -p $dev_path
@@ -171,8 +172,7 @@ index 0000000..0714573
 +    mknod -m 600 ${dev_path}/initctl p
 +    mknod -m 666 ${dev_path}/ptmx c 5 2
 +    mkdir -m 755 ${dev_path}/net
-+    mknod -m 666 ${dev_path}/net/tun	c 10 200
-+    return 0
++    mknod -m 666 ${dev_path}/net/tun c 10 200
 +
 +}
 +
@@ -181,7 +181,7 @@ index 0000000..0714573
 +    [[ -z "$root_password" ]] && return # pass is empty, abort
 +
 +    echo -n " - setting guest root password.."
-+    echo "root passwd is: $root_password"
++    echo -n "root passwd is: $root_password"
 +    echo "root:$root_password" | chroot "$rootfs_path" chpasswd
 +    echo "done."
 +}
@@ -196,10 +196,9 @@ index 0000000..0714573
 +        return 1
 +    fi
 +    # package list to install
-+    PKG_LIST="basesystem-minimal locales locales-en initscripts urpmi cronie dhcp-client"
++    PKG_LIST="basesystem-minimal locales locales-en initscripts urpmi cronie dhcp-client kbd"
 +    # download a mini openmandriva into a cache
 +    echo "Downloading openmandriva minimal ..."
-+    #URPMI="/usr/sbin/urpmi.addmedia --urpmi-root $INSTALL_ROOT main http://abf.rosalinux.ru/downloads/$distro/repository/$arch/main/release"
 +    URPMI="/usr/sbin/urpmi.addmedia --urpmi-root $INSTALL_ROOT main http://abf.rosalinux.ru/downloads/$release/repository/$arch/main/release"
 +    echo $URPMI
 +    URPMI_BASE="/usr/sbin/urpmi --no-suggests --no-verify-rpm --ignorearch --root $INSTALL_ROOT --urpmi-root $INSTALL_ROOT --auto $PKG_LIST"
@@ -232,8 +231,25 @@ index 0000000..0714573
 +update_openmandriva()
 +{
 +    echo "automated update in progress..."
-+#    chroot $cache/rootfs urpmi --auto --auto-update
++    urpmi --root $cache/rootfs urpmi-root $cache/rootfs --auto --auto-update --ignorearch
 +}
++
++configure_openmandriva_systemd()
++{
++    chroot ${rootfs_path} ln -s /dev/null /etc/systemd/system/proc-sys-fs-binfmt_misc.automount
++    chroot ${rootfs_path} ln -s /dev/null /etc/systemd/system/systemd-udevd.service
++    chroot ${rootfs_path} ln -s /dev/null /etc/systemd/system/systemd-udevd-control.socket
++    chroot ${rootfs_path} ln -s /dev/null /etc/systemd/system/systemd-udevd-kernel.socket
++    # remove numlock service
++    # KDGKBLED: Inappropriate ioctl for device
++    rm -f ${rootfs_path}/etc/systemd/system/getty@.service.d/enable-numlock.conf
++
++    unlink ${rootfs_path}/etc/systemd/system/default.target
++    chroot ${rootfs_path} ln -s /lib/systemd/system/multi-user.target /etc/systemd/system/default.target
++    sed -i 's!ConditionPathExists=/dev/tty0!ConditionPathExists=|/dev/tty0\nConditionVirtualization=|lxc!' \
++	    ${rootfs_path}/lib/systemd/system/getty\@.service
++}
++
 +
 +install_openmandriva()
 +{
@@ -282,6 +298,7 @@ index 0000000..0714573
 +    grep -q "^lxc.rootfs" $config_path/config 2>/dev/null || echo "lxc.rootfs = $rootfs_path" >> $config_path/config
 +    cat <<EOF >> $config_path/config
 +lxc.utsname = $name
++lxc.autodev = 1
 +lxc.tty = 4
 +lxc.pts = 1024
 +lxc.mount = $config_path/fstab
@@ -294,7 +311,7 @@ index 0000000..0714573
 +lxc.network.type = $lxc_network_type
 +lxc.network.flags = up
 +lxc.network.link = $lxc_network_link
-+lxc.network.name = veth0
++lxc.network.name = eth0
 +lxc.network.mtu = 1500
 +EOF
 +if [ ! -z ${ipv4} ]; then
@@ -448,6 +465,10 @@ index 0000000..0714573
 +    exit 0
 +fi
 +
++if [ -z "${utsname}" ]; then
++    utsname=${name}
++fi
++
 +type urpmi >/dev/null 2>&1
 +if [ $? -ne 0 ]; then
 +    echo "'urpmi' command is missing"
@@ -505,6 +526,12 @@ index 0000000..0714573
 +if [ $? -ne 0 ]; then
 +    echo "failed to configure openmandriva for a container"
 +    exit 1
++fi
++
++# If the systemd configuration directory exists - set it up for what we need.
++if [ -d ${rootfs_path}/etc/systemd/system ]
++then
++    configure_openmandriva_systemd
 +fi
 +
 +populate_dev

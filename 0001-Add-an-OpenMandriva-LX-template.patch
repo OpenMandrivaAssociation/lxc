@@ -231,7 +231,7 @@ index 0000000..a0f0cad
 +update_openmandriva()
 +{
 +    echo "automated update in progress..."
-+    urpmi --root $cache/rootfs urpmi-root $cache/rootfs --auto --auto-update --ignorearch
++    urpmi --root $cache/rootfs --urpmi-root $cache/rootfs --auto --auto-update --ignorearch
 +}
 +
 +configure_openmandriva_systemd()

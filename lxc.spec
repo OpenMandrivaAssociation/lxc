@@ -102,6 +102,10 @@ The python3-%{name} package contains the Python3 binding for %{name}.
 
 %build
 autoreconf -fiv
+# Alexander Khryukin
+# change --with-distro=mandriva to openmandriva
+# after 1.0 release
+# https://github.com/lxc/lxc/pull/66
 %configure2_5x  F77=no \
 		--disable-apparmor \
 		--with-distro=mandriva \

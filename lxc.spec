@@ -12,7 +12,7 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	17
+Release:	18
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
@@ -22,6 +22,7 @@ Epoch:		1
 Patch0:		lxc-0.9.0-fedora-template.patch
 Patch1:		0001-Add-an-OpenMandriva-LX-template.patch
 Patch2:         lxc-0.9.0.ROSA.network.patch
+Patch3:         lxc-0.9.0.updates.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel

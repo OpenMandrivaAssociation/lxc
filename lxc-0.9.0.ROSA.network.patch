@@ -1,0 +1,28 @@
+diff -Nur lxc-0.9.0.old/templates/lxc-openmandriva.in lxc-0.9.0/templates/lxc-openmandriva.in
+--- lxc-0.9.0.old/templates/lxc-openmandriva.in	2013-12-24 13:52:53.000000000 +0400
++++ lxc-0.9.0/templates/lxc-openmandriva.in	2013-12-24 14:13:59.431521380 +0400
+@@ -168,6 +168,11 @@
+ 	    ${rootfs_path}/lib/systemd/system/getty\@.service
+ }
+ 
++configure_openmandriva_network_service()
++{
++chroot ${rootfs_path} chkconfig network --level 01234567 on
++}
++
+ 
+ install_openmandriva()
+ {
+@@ -452,6 +457,12 @@
+     configure_openmandriva_systemd
+ fi
+ 
++#for ROSA currently it is required to setup network explicitly, chckconfig is used
++if [ "$release" = "rosa2012.1" ]
++then
++    configure_openmandriva_network_service
++fi
++
+ populate_dev
+ if [ $? -ne 0 ]; then
+     echo "failed to populated /dev/ devices"

@@ -16,6 +16,7 @@ Release:	19
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
+Source1:	%{name}.sh
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
@@ -129,6 +130,8 @@ make
 %makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libexecdir}/lxc/rootfs
 
 mkdir -p %{buildroot}/var/lib/%{name}
+mkdir -p %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/
+install %{SOURCE1} %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/lxc
 
 %files
 %doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
@@ -140,6 +143,7 @@ mkdir -p %{buildroot}/var/lib/%{name}
 %{_mandir}/man*/%{name}*
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
+%{_sysconfdir}/%{name}/bash_completion.d/lxc
 /etc/lxc/default.conf
 
 %files -n %{libname}

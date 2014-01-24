@@ -1,0 +1,10 @@
+# LXC sysctl rule
+
+# enable IP forwarding for LXC
+net.ipv4.ip_forward = 1
+
+# disable oom-killer
+# usually it's needed for ARM devices
+# that don't have a lot of memory
+vm.overcommit_memory = 2
+vm.overcommit_ratio = 100

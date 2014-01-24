@@ -12,11 +12,14 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	19
+Release:	20
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
 Source1:	%{name}.sh
+Source2:	dnsmasq-rule
+Source3:	ifcfg-lxcbr0
+Source4:	sysctl-rule
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
@@ -132,7 +135,13 @@ make
 
 mkdir -p %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/
-install %{SOURCE1} %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/lxc
+mkdir -p %{buildroot}%{_sysconfdir}/dnsmasq.d/
+mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
+mkdir -p %{buildroot}%{_sysconfdir}/sysctl.d/
+install %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}/bash_completion.d/lxc
+install %{SOURCE2} %{buildroot}%{_sysconfdir}/dnsmasq.d/lxc
+install %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
+install %{SOURCE3} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 
 %files
 %doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
@@ -145,6 +154,9 @@ install %{SOURCE1} %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/lxc
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
 %{_sysconfdir}/%{name}/bash_completion.d/lxc
+%{_sysconfdir}/dnsmasq.d/lxc
+%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
+%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 /etc/lxc/default.conf
 
 %files -n %{libname}

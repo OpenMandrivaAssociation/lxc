@@ -12,7 +12,7 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	18
+Release:	19
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
@@ -44,6 +44,9 @@ Requires:       debootstrap rsync
 Requires:       openssh-server
 # bridge
 Requires:       bridge-utils
+# for lxcbr0
+Requires:       iptables
+Requires:       dnsmasq
 
 Conflicts:   lxc-doc < 0.7.5
 Obsoletes:   lxc-doc < 0.7.5

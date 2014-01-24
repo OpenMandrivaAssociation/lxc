@@ -24,6 +24,7 @@ Patch0:		lxc-0.9.0-fedora-template.patch
 Patch1:		0001-Add-an-OpenMandriva-LX-template.patch
 Patch2:         lxc-0.9.0.ROSA.network.patch
 Patch3:         lxc-0.9.0.updates.patch
+Patch4:		disable-werror-for-autoreconf.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel

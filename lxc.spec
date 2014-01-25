@@ -12,7 +12,7 @@
 
 Name:		lxc
 Version:	0.9.0
-Release:	20
+Release:	23
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
@@ -48,10 +48,11 @@ Requires:       debootstrap rsync
 # needed for lxc-sshd
 Requires:       openssh-server
 # bridge
-Requires:       bridge-utils
+Requires:	bridge-utils
 # for lxcbr0
-Requires:       iptables
-Requires:       dnsmasq
+Requires:	iptables
+Requires:	dnsmasq
+Requires:	%{libname} = %{version}-%{release}
 
 Conflicts:   lxc-doc < 0.7.5
 Obsoletes:   lxc-doc < 0.7.5
@@ -70,6 +71,7 @@ sshd.
 %package -n	%{libname}
 Summary:	Library for LXC
 Group:		System/Libraries
+Obsoletes:	%{libname} < %{EVRD}
 
 %description -n %{libname}
 Library for the Linux Kernel Containers.
@@ -140,8 +142,8 @@ mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
 mkdir -p %{buildroot}%{_sysconfdir}/sysctl.d/
 install %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}/bash_completion.d/lxc
 install %{SOURCE2} %{buildroot}%{_sysconfdir}/dnsmasq.d/lxc
-install %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
-install %{SOURCE3} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
+install %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
+install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 
 %files
 %doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING

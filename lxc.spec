@@ -70,7 +70,6 @@ sshd.
 %package -n	%{libname}
 Summary:	Library for LXC
 Group:		System/Libraries
-Obsoletes:	%{libname} < %{EVRD}
 
 %description -n %{libname}
 Library for the Linux Kernel Containers.
@@ -78,6 +77,7 @@ Library for the Linux Kernel Containers.
 %package -n	%{develname}
 Summary:	Development files for LXC
 Group:		Development/C
+Requires:	%{libname} = %{EVRD}
 
 %description -n %{develname}
 Developement files for the Linux Kernel Containers.

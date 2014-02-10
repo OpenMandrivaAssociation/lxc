@@ -1,18 +1,18 @@
-From a61a74b1f63acdccfb6eb7efbefc6fee1e3af9a3 Mon Sep 17 00:00:00 2001
+From 0b5365c9c37b97ca7ad24b5e0792c0770be2ac58 Mon Sep 17 00:00:00 2001
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Thu, 10 Oct 2013 14:33:22 +0000
-Subject: [PATCH] Add an OpenMandriva LX template
+Date: Mon, 10 Feb 2014 16:58:06 +0100
+Subject: [PATCH] rebuild patch
 
 ---
  configure.ac                  |   1 +
  templates/Makefile.am         |   1 +
  templates/Makefile.in         |   7 +-
- templates/lxc-openmandriva.in | 477 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 484 insertions(+), 2 deletions(-)
+ templates/lxc-openmandriva.in | 479 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 486 insertions(+), 2 deletions(-)
  create mode 100644 templates/lxc-openmandriva.in
 
 diff --git a/configure.ac b/configure.ac
-index 7dc82cf..f8c14ff 100644
+index 44802c8..1113d92 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -361,6 +361,7 @@ AC_CONFIG_FILES([
@@ -76,10 +76,10 @@ index c61c3b4..a3301a5 100644
  lxc-altlinux: $(top_builddir)/config.status $(srcdir)/lxc-altlinux.in
 diff --git a/templates/lxc-openmandriva.in b/templates/lxc-openmandriva.in
 new file mode 100644
-index 0000000..a0f0cad
+index 0000000..1ab1b74
 --- /dev/null
 +++ b/templates/lxc-openmandriva.in
-@@ -0,0 +1,477 @@
+@@ -0,0 +1,479 @@
 +#!/bin/bash
 +
 +#
@@ -560,5 +560,5 @@ index 0000000..a0f0cad
 +fi
 +echo "container rootfs and config created"
 -- 
-1.8.3.2
+1.8.5.3
 

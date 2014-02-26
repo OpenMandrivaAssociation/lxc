@@ -11,11 +11,11 @@
 %bcond_with	python3
 
 Name:		lxc
-Version:	0.9.0
+Version:	1.0.0
 Release:	24
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
-Source0:	http://dl.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
+Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
 Source1:	%{name}.sh
 Source2:	dnsmasq-rule
 Source3:	ifcfg-lxcbr0
@@ -23,11 +23,9 @@ Source4:	sysctl-rule
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
-Patch0:		lxc-0.9.0-fedora-template.patch
-Patch1:		0001-Add-an-OpenMandriva-LX-template.patch
-Patch2:         lxc-0.9.0.ROSA.network.patch
-Patch3:         lxc-0.9.0.updates.patch
-Patch4:		disable-werror-for-autoreconf.patch
+Patch0:         lxc-0.9.0.ROSA.network.patch
+Patch1:         lxc-0.9.0.updates.patch
+Patch2:		fix-node-device.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel
@@ -119,7 +117,7 @@ autoreconf -fiv
 # https://github.com/lxc/lxc/pull/66
 %configure2_5x  F77=no \
 		--disable-apparmor \
-		--with-distro=mandriva \
+		--with-distro=openmandriva \
 %if %{with lua}
 		--enable-lua \
 %endif
@@ -129,7 +127,7 @@ autoreconf -fiv
 
 # remove rpath ( rpmlint error )
 sed -i '/AM_LDFLAGS = -Wl,-E -Wl,-rpath -Wl,$(libdir)/d' src/lxc/Makefile.in
-make
+%make
 
 %install
 %makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libexecdir}/lxc/rootfs

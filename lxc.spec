@@ -22,6 +22,7 @@ Source1:	%{name}.sh
 Source2:	dnsmasq-rule
 Source3:	ifcfg-lxcbr0
 Source4:	sysctl-rule
+Source100:	lxc.rpmlintrc
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1

@@ -132,7 +132,7 @@ The python3-%{name} package contains the Python3 binding for %{name}.
 %make
 
 %install
-%makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libexecdir}/lxc/rootfs
+%makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
 
 mkdir -p %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/
@@ -147,7 +147,7 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %files
 %doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
 %{_bindir}/lxc-*
-%{_libexecdir}/lxc/lxc-*
+%{_libdir}/lxc/lxc-*
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
 %{_libexecdir}/lxc/rootfs/README

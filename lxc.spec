@@ -14,7 +14,7 @@
 
 Name:		lxc
 Version:	1.0.0
-Release:	24
+Release:	25
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
@@ -147,10 +147,10 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %files
 %doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
 %{_bindir}/lxc-*
-%{_libdir}/lxc/lxc-*
+%{_libexecdir}/lxc/lxc-*
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
-%{_libexecdir}/lxc/rootfs/README
+%{_libdir}/lxc/rootfs/README
 %{_mandir}/man*/%{name}*
 %{_mandir}/ja/man*/*
 %{_datadir}/%{name}/config/*.conf

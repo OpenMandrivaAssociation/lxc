@@ -10,7 +10,7 @@
 # disable it untill https://github.com/lxc/lxc/issues/174
 # not solved
 %bcond_without	lua
-%bcond_without	python3
+%bcond_with	python3
 
 Name:		lxc
 Version:	1.0.5

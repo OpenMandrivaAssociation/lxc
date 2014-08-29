@@ -9,12 +9,12 @@
 %define luapkgdir %{_datadir}/lua/%{luaver}
 # disable it untill https://github.com/lxc/lxc/issues/174
 # not solved
-%bcond_with	lua
-%bcond_with	python3
+%bcond_without	lua
+%bcond_without	python3
 
 Name:		lxc
-Version:	1.0.0
-Release:	27
+Version:	1.0.5
+Release:	1
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
@@ -30,6 +30,7 @@ Patch0:         lxc-0.9.0.ROSA.network.patch
 Patch1:         lxc-0.9.0.updates.patch
 Patch2:		fix-node-device.patch
 Patch3:		fix-systemd-path.patch
+Patch4:		lxc-1.0.5-lua-linkage.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel
@@ -102,7 +103,7 @@ The lua-%{name} package contains the Lua binding for %{name}.
 %if %{with python3}
 %package        -n python3-%{name}
 Summary:        Python binding for %{name}
-Group:          System Environment/Libraries
+Group:          System/Libraries
 
 %description    -n python3-%{name}
 Linux Resource Containers provide process and resource isolation without the
@@ -115,8 +116,13 @@ The python3-%{name} package contains the Python3 binding for %{name}.
 %setup -q
 %apply_patches
 
+# Clang spews a few more warnings than gcc...
+sed -i -e 's,-Werror,,g' configure*
+
+autoreconf -fi
+
 %build
-%configure2_5x \
+%configure \
 		--disable-apparmor \
 		--with-init-script=systemd \
 		--with-distro=openmandriva \
@@ -145,15 +151,22 @@ install %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lx
 install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 
 %files
-%doc README MAINTAINERS NEWS TODO ChangeLog AUTHORS CONTRIBUTING COPYING
+%doc README MAINTAINERS NEWS ChangeLog AUTHORS CONTRIBUTING COPYING
 %{_bindir}/lxc-*
+%{_sbindir}/init.lxc
 %{_libexecdir}/lxc/lxc-*
+%dir %{_datadir}/lxc
+%dir %{_datadir}/lxc/config
+%dir %{_datadir}/lxc/hooks
+%dir %{_datadir}/lxc/templates
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
 %{_libdir}/lxc/rootfs/README
 %{_mandir}/man*/%{name}*
 %{_mandir}/ja/man*/*
+%{_datadir}/%{name}/config/*.seccomp
 %{_datadir}/%{name}/config/*.conf
+%{_datadir}/lxc/lxc-patch.py
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
 %{_sysconfdir}/bash_completion.d/lxc

@@ -91,7 +91,6 @@ Developement files for the Linux Kernel Containers.
 %package        -n lua-%{name}
 Summary:        Lua binding for %{name}
 Group:          System/Libraries
-Requires:       lua-filesystem
 
 %description    -n lua-%{name}
 Linux Resource Containers provide process and resource isolation without the

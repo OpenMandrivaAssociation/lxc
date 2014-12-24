@@ -13,8 +13,8 @@
 %bcond_without	python3
 
 Name:		lxc
-Version:	1.0.5
-Release:	2
+Version:	1.0.7
+Release:	1
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
@@ -159,8 +159,10 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %dir %{_datadir}/lxc/config
 %dir %{_datadir}/lxc/hooks
 %dir %{_datadir}/lxc/templates
+%dir %{_datadir}/lxc/selinux
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
+%{_datadir}/lxc/selinux/lxc.*
 %{_libdir}/lxc/rootfs/README
 %{_mandir}/man*/%{name}*
 %{_mandir}/ja/man*/*

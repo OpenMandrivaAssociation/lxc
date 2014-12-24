@@ -1,7 +1,9 @@
---- lxc-1.0.5/src/lua-lxc/Makefile.am.omv~	2014-08-29 10:30:05.403712665 +0200
-+++ lxc-1.0.5/src/lua-lxc/Makefile.am	2014-08-29 10:30:24.835469734 +0200
+diff --git a/src/lua-lxc/Makefile.am b/src/lua-lxc/Makefile.am
+index 9b73df1..2791db5 100644
+--- a/src/lua-lxc/Makefile.am
++++ b/src/lua-lxc/Makefile.am
 @@ -20,7 +20,7 @@ core_so_LDFLAGS = \
- 	-L$(top_srcdir)/src/lxc \
+ 	-L$(top_builddir)/src/lxc \
  	-Wl,-soname,core.so.$(firstword $(subst ., ,$(VERSION)))
  
 -core_so_LDADD = -llxc

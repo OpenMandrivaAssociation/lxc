@@ -13,7 +13,7 @@
 %bcond_without	python3
 
 Name:		lxc
-Version:	1.0.7
+Version:	1.1.0
 Release:	1
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
@@ -29,7 +29,7 @@ Epoch:		1
 Patch0:         lxc-0.9.0.ROSA.network.patch
 Patch1:         lxc-0.9.0.updates.patch
 Patch2:		fix-node-device.patch
-Patch3:		fix-systemd-path.patch
+#Patch3:		fix-systemd-path.patch
 Patch4:		lxc-1.0.5-lua-linkage.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
@@ -152,6 +152,8 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 
 %files
 %doc README MAINTAINERS NEWS ChangeLog AUTHORS CONTRIBUTING COPYING
+%{_datadir}/%{name}/config/common.conf.d/README
+%{_sysconfdir}/default/%{name}
 %{_bindir}/lxc-*
 %{_sbindir}/init.lxc
 %{_libexecdir}/lxc/lxc-*
@@ -160,6 +162,7 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %dir %{_datadir}/lxc/hooks
 %dir %{_datadir}/lxc/templates
 %dir %{_datadir}/lxc/selinux
+%dir %{_datadir}/lxc/config/common.conf.d
 %{_datadir}/lxc/templates/*
 %{_datadir}/lxc/hooks/*
 %{_datadir}/lxc/selinux/lxc.*
@@ -171,10 +174,12 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{_datadir}/lxc/lxc-patch.py
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
+%{_datadir}/%{name}/lxc-restore-net
 %{_sysconfdir}/bash_completion.d/lxc
 %{_sysconfdir}/dnsmasq.d/lxc
 %{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
 %{_unitdir}/lxc.service
+%{_unitdir}/lxc-net.service
 %{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 /etc/lxc/default.conf
 

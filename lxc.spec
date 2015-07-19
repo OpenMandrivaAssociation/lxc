@@ -14,7 +14,7 @@
 
 Name:		lxc
 Version:	1.1.0
-Release:	1
+Release:	2
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz

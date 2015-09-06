@@ -4,7 +4,7 @@
 %define debugcflags	%nil
 %define	debug_package	%nil
 
-%define luaver 5.2
+%define luaver 5.3
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 # disable it untill https://github.com/lxc/lxc/issues/174
@@ -13,8 +13,8 @@
 %bcond_without	python3
 
 Name:		lxc
-Version:	1.1.0
-Release:	2
+Version:	1.1.3
+Release:	1
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
@@ -34,6 +34,7 @@ Patch4:		lxc-1.0.5-lua-linkage.patch
 BuildRequires:	docbook-utils
 BuildRequires:  kernel-headers
 BuildRequires:	cap-devel
+BuildRequires:	pkgconfig(libsystemd)
 Buildrequires:	docbook-dtd30-sgml
 Buildrequires:	docbook2x
 %if %{with lua}
@@ -174,7 +175,6 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{_datadir}/lxc/lxc-patch.py
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
-%{_datadir}/%{name}/lxc-restore-net
 %{_sysconfdir}/bash_completion.d/lxc
 %{_sysconfdir}/dnsmasq.d/lxc
 %{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0

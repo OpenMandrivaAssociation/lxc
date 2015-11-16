@@ -13,7 +13,7 @@
 %bcond_without	python3
 
 Name:		lxc
-Version:	1.1.3
+Version:	1.1.5
 Release:	1
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net

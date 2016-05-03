@@ -10,11 +10,11 @@
 # disable it untill https://github.com/lxc/lxc/issues/174
 # not solved
 %bcond_without	lua
-%bcond_without	python3
+%bcond_without	python
 
 Name:		lxc
 Version:	1.1.5
-Release:	1
+Release:	2
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
@@ -40,7 +40,7 @@ Buildrequires:	docbook2x
 %if %{with lua}
 Buildrequires:	lua-devel
 %endif
-%if %{with python3}
+%if %{with python}
 Buildrequires:	python3-devel
 %endif
 # needed for lxc-busybox
@@ -101,16 +101,17 @@ overhead of full virtualization.
 The lua-%{name} package contains the Lua binding for %{name}.
 %endif
 
-%if %{with python3}
-%package        -n python3-%{name}
+%if %{with python}
+%package        -n python-%{name}
 Summary:        Python binding for %{name}
 Group:          System/Libraries
+%rename		python3-%{name}
 
-%description    -n python3-%{name}
+%description    -n python-%{name}
 Linux Resource Containers provide process and resource isolation without the
 overhead of full virtualization.
 
-The python3-%{name} package contains the Python3 binding for %{name}.
+The python-%{name} package contains the Python3 binding for %{name}.
 %endif
 
 %prep
@@ -130,7 +131,7 @@ autoreconf -fi
 %if %{with lua}
 		--enable-lua \
 %endif
-%if %{with python3}
+%if %{with python}
 		--enable-python \
 %endif
 
@@ -199,7 +200,7 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{luapkgdir}/%{name}.lua
 %endif
 
-%if %{with python3}
-%files -n python3-%{name}
+%if %{with python}
+%files -n python-%{name}
 %{python3_sitearch}/*
 %endif

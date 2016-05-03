@@ -124,6 +124,11 @@ sed -i -e 's,-Werror,,g' configure*
 autoreconf -fi
 
 %build
+%ifarch %ix86
+export CC=gcc
+export CXX=g++
+%endif
+
 %configure \
 		--disable-apparmor \
 		--with-init-script=systemd \

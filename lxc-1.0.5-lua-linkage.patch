@@ -1,13 +1,11 @@
-diff --git a/src/lua-lxc/Makefile.am b/src/lua-lxc/Makefile.am
-index 9b73df1..2791db5 100644
---- a/src/lua-lxc/Makefile.am
-+++ b/src/lua-lxc/Makefile.am
-@@ -20,7 +20,7 @@ core_so_LDFLAGS = \
+--- lxc-2.0.7/src/lua-lxc/Makefile.am.0004~	2017-05-02 21:11:29.414068030 +0200
++++ lxc-2.0.7/src/lua-lxc/Makefile.am	2017-05-02 21:13:41.411383864 +0200
+@@ -19,7 +19,7 @@ libcore_la_LDFLAGS = \
  	-L$(top_builddir)/src/lxc \
  	-Wl,-soname,core.so.$(firstword $(subst ., ,$(VERSION)))
  
--core_so_LDADD = -llxc
-+core_so_LDADD = -llxc -llua
+-libcore_la_LIBADD = -llxc
++libcore_la_LIBADD = -llxc -llua
  
- lxc.lua:
- 
+ install-exec-local: install-libLTLIBRARIES
+ 	mkdir -p $(DESTDIR)$(lualibdir)/lxc/

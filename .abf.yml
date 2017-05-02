@@ -1,4 +1,2 @@
-removed_sources:
-  lxc-1.1.3.tar.gz: 076b35138661c4a3d8cb76ca94beb9754edf0161
 sources:
-  lxc-1.1.5.tar.gz: 015c6fed471d5f0d396bc49ab8c23301fe663171
+  lxc-2.0.7.tar.gz: 340d7a594cdbb8f9bab89a3f0109fd06aaeacb42

@@ -13,8 +13,8 @@
 %bcond_without	python
 
 Name:		lxc
-Version:	1.1.5
-Release:	3
+Version:	2.0.7
+Release:	1
 Summary:	Linux Containers
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
@@ -148,14 +148,15 @@ export CXX=g++
 %makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
 
 mkdir -p %{buildroot}/var/lib/%{name}
-mkdir -p %{buildroot}/%{_sysconfdir}/%{name}/bash_completion.d/
 mkdir -p %{buildroot}%{_sysconfdir}/dnsmasq.d/
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
 mkdir -p %{buildroot}%{_sysconfdir}/sysctl.d/
-install config/bash/lxc %{buildroot}%{_sysconfdir}/bash_completion.d/lxc
 install %{SOURCE2} %{buildroot}%{_sysconfdir}/dnsmasq.d/lxc
 install %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
 install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
+
+# Fix up bogus pkgconfig files
+sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 
 %files
 %doc README MAINTAINERS NEWS ChangeLog AUTHORS CONTRIBUTING COPYING
@@ -163,7 +164,10 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{_sysconfdir}/default/%{name}
 %{_bindir}/lxc-*
 %{_sbindir}/init.lxc
+%dir %{_libexecdir}/lxc
 %{_libexecdir}/lxc/lxc-*
+%dir %{_libexecdir}/lxc/hooks
+%{_libexecdir}/lxc/hooks/unmount-namespace
 %dir %{_datadir}/lxc
 %dir %{_datadir}/lxc/config
 %dir %{_datadir}/lxc/hooks
@@ -181,13 +185,15 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{_datadir}/lxc/lxc-patch.py
 /var/lib/%{name}
 %{_datadir}/%{name}/%{name}.functions
-%{_sysconfdir}/bash_completion.d/lxc
 %{_sysconfdir}/dnsmasq.d/lxc
 %{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
 %{_unitdir}/lxc.service
 %{_unitdir}/lxc-net.service
 %{_sysconfdir}/sysctl.d/99-lxc-oom.conf
-/etc/lxc/default.conf
+%{_sysconfdir}/lxc/default.conf
+/lib/systemd/system/lxc@.service
+%{_sysconfdir}/bash_completion.d/lxc
+%lang(ko) %{_mandir}/ko/*/*
 
 %files -n %{libname}
 %{_libdir}/lib%{name}.so.%{major}

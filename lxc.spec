@@ -2,7 +2,7 @@
 %define libname %mklibname lxc %{major}
 %define develname %mklibname lxc -d
 %define debugcflags	%nil
-%define	debug_package	%nil
+%define debug_package	%nil
 
 %define luaver 5.3
 %define lualibdir %{_libdir}/lua/%{luaver}
@@ -16,6 +16,9 @@ Name:		lxc
 Version:	2.0.7
 Release:	1
 Summary:	Linux Containers
+Group:		System/Kernel and hardware
+License:	LGPLv2
+Epoch:		1
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
 Source1:	%{name}.sh
@@ -23,16 +26,12 @@ Source2:	dnsmasq-rule
 Source3:	ifcfg-lxcbr0
 Source4:	sysctl-rule
 Source100:	lxc.rpmlintrc
-Group:		System/Kernel and hardware
-License:	LGPLv2
-Epoch:		1
-Patch0:         lxc-0.9.0.ROSA.network.patch
-Patch1:         lxc-0.9.0.updates.patch
+Patch0:		lxc-0.9.0.ROSA.network.patch
+Patch1:		lxc-0.9.0.updates.patch
 Patch2:		fix-node-device.patch
-#Patch3:		fix-systemd-path.patch
 Patch4:		lxc-1.0.5-lua-linkage.patch
 BuildRequires:	docbook-utils
-BuildRequires:  kernel-headers
+BuildRequires:	kernel-headers
 BuildRequires:	cap-devel
 BuildRequires:	pkgconfig(libsystemd)
 Buildrequires:	docbook-dtd30-sgml
@@ -41,26 +40,27 @@ Buildrequires:	docbook2x
 Buildrequires:	lua-devel
 %endif
 %if %{with python}
-Buildrequires:	python3-devel
+Buildrequires:	pkgconfig(python3)
 %endif
 # needed for lxc-busybox
-Requires:       busybox
+Requires:	busybox
 # needed for lxc-debian
-Requires:       dpkg
+Requires:	dpkg
 # needed for lxc-debian, lxc-ubuntu:
-Requires:       debootstrap rsync
+Requires:	debootstrap
+Requires:	rsync
 # needed for lxc-sshd
-Requires:       openssh-server
+Requires:	openssh-server
 # bridge
 Requires:	bridge-utils
 # for lxcbr0
 Requires:	iptables
 Requires:	dnsmasq
 # bash completion
-Requires:	bash-completion
+Recommends:	bash-completion
 
-Conflicts:   lxc-doc < 0.7.5
-Obsoletes:   lxc-doc < 0.7.5
+Conflicts:	lxc-doc < 0.7.5
+Obsoletes:	lxc-doc < 0.7.5
 
 %description
 The package "%{name}" provides the command lines to create and manage
@@ -73,14 +73,14 @@ or the freeze of the container. This package is useful to create
 Virtual Private Server, or to run isolated applications like bash or
 sshd.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Library for LXC
 Group:		System/Libraries
 
 %description -n %{libname}
 Library for the Linux Kernel Containers.
 
-%package -n	%{develname}
+%package -n %{develname}
 Summary:	Development files for LXC
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
@@ -89,12 +89,12 @@ Requires:	%{libname} = %{EVRD}
 Developement files for the Linux Kernel Containers.
 
 %if %{with lua}
-%package        -n lua-%{name}
-Summary:        Lua binding for %{name}
-Group:          System/Libraries
-Requires:       lua-filesystem
+%package -n lua-%{name}
+Summary:	Lua binding for %{name}
+Group:		System/Libraries
+Requires:	lua-filesystem
 
-%description    -n lua-%{name}
+%description -n lua-%{name}
 Linux Resource Containers provide process and resource isolation without the
 overhead of full virtualization.
 
@@ -102,12 +102,12 @@ The lua-%{name} package contains the Lua binding for %{name}.
 %endif
 
 %if %{with python}
-%package        -n python-%{name}
-Summary:        Python binding for %{name}
-Group:          System/Libraries
+%package  -n python-%{name}
+Summary:	Python binding for %{name}
+Group:		System/Libraries
 %rename		python3-%{name}
 
-%description    -n python-%{name}
+%description -n python-%{name}
 Linux Resource Containers provide process and resource isolation without the
 overhead of full virtualization.
 
@@ -116,7 +116,7 @@ The python-%{name} package contains the Python3 binding for %{name}.
 
 %prep
 %setup -q
-%apply_patches
+%autopatch -p1
 
 # Clang spews a few more warnings than gcc...
 sed -i -e 's,-Werror,,g' configure*
@@ -142,10 +142,10 @@ export CXX=g++
 
 # remove rpath ( rpmlint error )
 # sed -i '/AM_LDFLAGS = -Wl,-E -Wl,-rpath -Wl,$(libdir)/d' src/lxc/Makefile.in
-%make
+%make_build
 
 %install
-%makeinstall_std templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
+%make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
 
 mkdir -p %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}/dnsmasq.d/
@@ -159,7 +159,7 @@ install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 
 %files
-%doc README MAINTAINERS NEWS ChangeLog AUTHORS CONTRIBUTING COPYING
+%doc %{_docdir}/%{name}
 %{_datadir}/%{name}/config/common.conf.d/README
 %{_sysconfdir}/default/%{name}
 %{_bindir}/lxc-*
@@ -200,7 +200,6 @@ sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 %{_libdir}/lib%{name}.so.%{major}.*
 
 %files -n %{develname}
-%doc COPYING
 %{_includedir}/%{name}/*.h
 %{_libdir}/lib%{name}.so
 %{_libdir}/pkgconfig/%{name}.pc
@@ -214,4 +213,5 @@ sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 %if %{with python}
 %files -n python-%{name}
 %{python3_sitearch}/*
+%{_datadir}/%{name}/__pycache__/*.pyc
 %endif

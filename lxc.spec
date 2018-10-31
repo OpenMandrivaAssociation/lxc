@@ -14,7 +14,7 @@
 
 Name:		lxc
 Version:	2.0.7
-Release:	1
+Release:	2
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2

@@ -1,0 +1,13 @@
+diff -up lxc-3.1.0/python3-lxc-3.0.3/setup.py.omv~ lxc-3.1.0/python3-lxc-3.0.3/setup.py
+--- lxc-3.1.0/python3-lxc-3.0.3/setup.py.omv~	2018-12-18 23:25:39.983905986 +0100
++++ lxc-3.1.0/python3-lxc-3.0.3/setup.py	2018-12-18 23:26:45.824787110 +0100
+@@ -59,6 +59,9 @@ class LxcBuildExtCommand(BuildExtCommand
+         self.no_pkg_config = False
+ 
+     def build_extensions(self):
++        self.compiler.add_include_dir('../src')
++        self.compiler.add_library_dir('../src/lxc')
++        self.compiler.add_library_dir('../src/lxc/.libs')
+         if not self.no_pkg_config:
+             pkg_config_executable = os.environ.get('PKG_CONFIG_EXECUTABLE',
+                                                    'pkg-config')

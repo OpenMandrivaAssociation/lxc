@@ -34,7 +34,8 @@ Source100:	lxc.rpmlintrc
 Patch0:		lxc-0.9.0.ROSA.network.patch
 Patch1:		lxc-0.9.0.updates.patch
 Patch2:		fix-node-device.patch
-Patch4:		lxc-1.0.5-lua-linkage.patch
+Patch3:		lxc-1.0.5-lua-linkage.patch
+Patch4:		lxc-3.1.0-python-linkage.patch
 BuildRequires:	docbook-utils
 BuildRequires:	kernel-headers
 BuildRequires:	cap-devel
@@ -160,7 +161,9 @@ cd ../lua-lxc-*
 %configure
 %make_build
 
-cd ../python3-lxc-*
+cd ..
+export PKG_CONFIG_PATH=`pwd`
+cd python3-lxc-*
 python setup.py build
 
 %install

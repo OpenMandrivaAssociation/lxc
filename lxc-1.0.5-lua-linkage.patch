@@ -1,12 +1,21 @@
-diff -up lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am.omv~ lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am
---- lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am.omv~	2018-12-11 15:07:16.556234846 +0100
-+++ lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am	2018-12-11 15:07:22.055300737 +0100
+diff -up lxc-3.1.0/lua-lxc-3.0.2/src/Makefile.am.4~ lxc-3.1.0/lua-lxc-3.0.2/src/Makefile.am
+--- lxc-3.1.0/lua-lxc-3.0.2/src/Makefile.am.4~	2018-12-18 22:16:50.494666766 +0100
++++ lxc-3.1.0/lua-lxc-3.0.2/src/Makefile.am	2018-12-18 22:16:50.490666713 +0100
+@@ -10,7 +10,7 @@ libcore_la_SOURCES = core.c
+ 
+ AM_LDFLAGS = -Wl,-E
+ 
+-AM_CFLAGS=-I$(top_builddir)/src -I$(top_srcdir)/src $(LUA_CFLAGS) -DVERSION=\"$(VERSION)\" -DLXCPATH=\"$(LXCPATH)\"
++AM_CFLAGS=-I$(top_builddir)/src -I$(top_srcdir)/src $(LUA_CFLAGS) -DVERSION=\"$(VERSION)\" -DLXCPATH=\"$(LXCPATH)\" -I../../src
+ 
+ libcore_la_CFLAGS = -fPIC -DPIC $(AM_CFLAGS)
+ 
 @@ -19,7 +19,7 @@ libcore_la_LDFLAGS = \
  	-L$(top_builddir)/ \
  	-Wl,-soname,core.so.$(firstword $(subst ., ,$(VERSION)))
  
 -libcore_la_LIBADD = -llxc
-+libcore_la_LIBADD = -llxc -llua
++libcore_la_LIBADD = -L../../src/lxc -L../../src/lxc/.libs -llxc -llua
  
  install-exec-local: install-libLTLIBRARIES
  	mkdir -p $(DESTDIR)$(lualibdir)/lxc/

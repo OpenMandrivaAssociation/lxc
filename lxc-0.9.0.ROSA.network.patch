@@ -1,6 +1,6 @@
-diff -Nur lxc-0.9.0.old/templates/lxc-openmandriva.in lxc-0.9.0/templates/lxc-openmandriva.in
---- lxc-0.9.0.old/templates/lxc-openmandriva.in	2013-12-24 13:52:53.000000000 +0400
-+++ lxc-0.9.0/templates/lxc-openmandriva.in	2013-12-24 14:13:59.431521380 +0400
+diff -Nur lxc-0.9.0.old/lxc-templates-3.0.3/templates/lxc-openmandriva.in lxc-0.9.0/lxc-templates-3.0.3/templates/lxc-openmandriva.in
+--- lxc-0.9.0.old/lxc-templates-3.0.3/templates/lxc-openmandriva.in	2013-12-24 13:52:53.000000000 +0400
++++ lxc-0.9.0/lxc-templates-3.0.3/templates/lxc-openmandriva.in	2013-12-24 14:13:59.431521380 +0400
 @@ -168,6 +168,11 @@
  	    ${rootfs_path}/lib/systemd/system/getty\@.service
  }

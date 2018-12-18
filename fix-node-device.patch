@@ -1,10 +1,9 @@
-diff --git a/templates/lxc-openmandriva.in b/templates/lxc-openmandriva.in
-index 1a498e1..eda87c5 100644
---- a/templates/lxc-openmandriva.in
-+++ b/templates/lxc-openmandriva.in
-@@ -47,7 +47,7 @@ default_path=@LXCPATH@
+diff -up lxc-3.0.3/lxc-templates-3.0.3/templates/lxc-openmandriva.in.3~ lxc-3.0.3/lxc-templates-3.0.3/templates/lxc-openmandriva.in
+--- lxc-3.0.3/lxc-templates-3.0.3/templates/lxc-openmandriva.in.3~	2018-12-11 15:04:48.255471393 +0100
++++ lxc-3.0.3/lxc-templates-3.0.3/templates/lxc-openmandriva.in	2018-12-11 15:05:19.203837050 +0100
+@@ -47,7 +47,7 @@ cache_base="${LXC_CACHE_PATH:-@LOCALSTAT
+ default_path=@LXCPATH@
  default_profile=default
- root_password=root
  lxc_network_type=veth
 -lxc_network_link=br0
 +lxc_network_link=lxcbr0

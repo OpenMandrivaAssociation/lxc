@@ -1,3 +1,5 @@
+%global _disable_rebuild_configure 0
+
 %define major 1
 %define libname %mklibname lxc %{major}
 %define develname %mklibname lxc -d
@@ -13,18 +15,21 @@
 %bcond_without	python
 
 Name:		lxc
-Version:	2.0.7
-Release:	2
+Version:	3.1.0
+Release:	1
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
-Source1:	%{name}.sh
-Source2:	dnsmasq-rule
-Source3:	ifcfg-lxcbr0
-Source4:	sysctl-rule
+Source1:	http://linuxcontainers.org/downloads/%{name}-templates-3.0.3.tar.gz
+Source2:	http://linuxcontainers.org/downloads/lua-%{name}-3.0.2.tar.gz
+Source3:	http://linuxcontainers.org/downloads/python3-%{name}-3.0.3.tar.gz
+Source4:	%{name}.sh
+Source5:	dnsmasq-rule
+Source6:	ifcfg-lxcbr0
+Source7:	sysctl-rule
 Source100:	lxc.rpmlintrc
 Patch0:		lxc-0.9.0.ROSA.network.patch
 Patch1:		lxc-0.9.0.updates.patch
@@ -41,13 +46,14 @@ Buildrequires:	lua-devel
 %endif
 %if %{with python}
 Buildrequires:	pkgconfig(python3)
+Buildrequires:	python-setuptools
 %endif
 # needed for lxc-busybox
-Requires:	busybox
+#Requires:	busybox
 # needed for lxc-debian
-Requires:	dpkg
+#Requires:	dpkg
 # needed for lxc-debian, lxc-ubuntu:
-Requires:	debootstrap
+#Requires:	debootstrap
 Requires:	rsync
 # needed for lxc-sshd
 Requires:	openssh-server
@@ -115,13 +121,17 @@ The python-%{name} package contains the Python3 binding for %{name}.
 %endif
 
 %prep
-%setup -q
+%setup -a 1 -a 2 -a 3
 %autopatch -p1
 
 # Clang spews a few more warnings than gcc...
 sed -i -e 's,-Werror,,g' configure*
 
-autoreconf -fi
+[ -e autogen.sh ] && ./autogen.sh || autoreconf -fi
+cd lxc-templates-*
+[ -e autogen.sh ] && ./autogen.sh || autoreconf -fi
+cd ../lua-lxc-*
+[ -e autogen.sh ] && ./autogen.sh || autoreconf -fi
 
 %build
 %ifarch %ix86
@@ -140,20 +150,36 @@ export CXX=g++
 		--enable-python \
 %endif
 
-# remove rpath ( rpmlint error )
-# sed -i '/AM_LDFLAGS = -Wl,-E -Wl,-rpath -Wl,$(libdir)/d' src/lxc/Makefile.in
 %make_build
+
+cd lxc-templates-*
+%configure
+%make_build
+
+cd ../lua-lxc-*
+%configure
+%make_build
+
+cd ../python3-lxc-*
+python setup.py build
 
 %install
 %make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
+cd lxc-templates-*
+%make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
+cd ../lua-lxc-*
+%make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
+cd ../python3-lxc-*
+python setup.py install --skip-build --root=%{buildroot} --single-version-externally-managed --record=INSTALLED_FILES --optimize=1
+cd ..
 
 mkdir -p %{buildroot}/var/lib/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}/dnsmasq.d/
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
 mkdir -p %{buildroot}%{_sysconfdir}/sysctl.d/
-install %{SOURCE2} %{buildroot}%{_sysconfdir}/dnsmasq.d/lxc
-install %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
-install %{SOURCE4} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
+install %{SOURCE4} %{buildroot}%{_sysconfdir}/dnsmasq.d/lxc
+install %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
+install %{SOURCE6} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 
 # Fix up bogus pkgconfig files
 sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*

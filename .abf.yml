@@ -1,2 +1,5 @@
 sources:
-  lxc-2.0.7.tar.gz: 340d7a594cdbb8f9bab89a3f0109fd06aaeacb42
+  lxc-3.1.0.tar.gz: c6d20643ff64e20924ec46f3b41a07df87b503d5
+  lua-lxc-3.0.2.tar.gz: bb958257c86b70f9bde90c604f7fbe7de971d61f
+  lxc-templates-3.0.3.tar.gz: dc6ce74b112a6440a5680941ce789b30ee654209
+  python3-lxc-3.0.3.tar.gz: e621b58a5b7c329682442ee0adc42df4d394f441

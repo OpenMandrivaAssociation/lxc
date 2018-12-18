@@ -1,7 +1,8 @@
---- lxc-2.0.7/src/lua-lxc/Makefile.am.0004~	2017-05-02 21:11:29.414068030 +0200
-+++ lxc-2.0.7/src/lua-lxc/Makefile.am	2017-05-02 21:13:41.411383864 +0200
+diff -up lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am.omv~ lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am
+--- lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am.omv~	2018-12-11 15:07:16.556234846 +0100
++++ lxc-3.0.3/lua-lxc-3.0.2/src/Makefile.am	2018-12-11 15:07:22.055300737 +0100
 @@ -19,7 +19,7 @@ libcore_la_LDFLAGS = \
- 	-L$(top_builddir)/src/lxc \
+ 	-L$(top_builddir)/ \
  	-Wl,-soname,core.so.$(firstword $(subst ., ,$(VERSION)))
  
 -libcore_la_LIBADD = -llxc

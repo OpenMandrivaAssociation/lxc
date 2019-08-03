@@ -15,7 +15,7 @@
 %bcond_without	python
 
 Name:		lxc
-Version:	3.1.0
+Version:	3.2.1
 Release:	1
 Summary:	Linux Containers
 Group:		System/Kernel and hardware

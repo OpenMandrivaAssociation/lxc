@@ -1,4 +1,6 @@
 %global _disable_rebuild_configure 0
+# The python module doesn't link to libpython
+%global _disable_ld_no_undefined 1
 
 %define major 1
 %define libname %mklibname lxc %{major}
@@ -15,25 +17,23 @@
 %bcond_without	python
 
 Name:		lxc
-Version:	3.2.1
-Release:	2
+Version:	4.0.4
+Release:	1
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
 URL:		http://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
-Source1:	http://linuxcontainers.org/downloads/%{name}-templates-3.0.3.tar.gz
+Source1:	http://linuxcontainers.org/downloads/%{name}-templates-3.0.4.tar.gz
 Source2:	http://linuxcontainers.org/downloads/lua-%{name}-3.0.2.tar.gz
-Source3:	http://linuxcontainers.org/downloads/python3-%{name}-3.0.3.tar.gz
+Source3:	http://linuxcontainers.org/downloads/python3-%{name}-3.0.4.tar.gz
 Source4:	%{name}.sh
 Source5:	dnsmasq-rule
 Source6:	ifcfg-lxcbr0
 Source7:	sysctl-rule
 Source100:	lxc.rpmlintrc
-Patch0:		lxc-0.9.0.ROSA.network.patch
-Patch1:		lxc-0.9.0.updates.patch
-Patch2:		fix-node-device.patch
+Patch0:		lxc-templates-openmandriva.patch
 Patch3:		lxc-1.0.5-lua-linkage.patch
 Patch4:		lxc-3.1.0-python-linkage.patch
 BuildRequires:	docbook-utils
@@ -63,8 +63,6 @@ Requires:	bridge-utils
 # for lxcbr0
 Requires:	iptables
 Requires:	dnsmasq
-# bash completion
-Recommends:	bash-completion
 
 Conflicts:	lxc-doc < 0.7.5
 Obsoletes:	lxc-doc < 0.7.5
@@ -221,7 +219,7 @@ sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 %{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{_sysconfdir}/lxc/default.conf
 /lib/systemd/system/lxc@.service
-%{_sysconfdir}/bash_completion.d/lxc
+%{_datadir}/bash-completion/completions/lxc
 %lang(ko) %{_mandir}/ko/*/*
 
 %files -n %{libname}
@@ -242,5 +240,4 @@ sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 %if %{with python}
 %files -n python-%{name}
 %{python3_sitearch}/*
-%{_datadir}/%{name}/__pycache__/*.pyc
 %endif

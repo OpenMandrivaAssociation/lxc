@@ -1,6 +1,6 @@
-diff -up lxc-3.1.0/python3-lxc-3.0.3/setup.py.omv~ lxc-3.1.0/python3-lxc-3.0.3/setup.py
---- lxc-3.1.0/python3-lxc-3.0.3/setup.py.omv~	2018-12-18 23:25:39.983905986 +0100
-+++ lxc-3.1.0/python3-lxc-3.0.3/setup.py	2018-12-18 23:26:45.824787110 +0100
+diff -up lxc-3.1.0/python3-lxc-3.0.4/setup.py.omv~ lxc-3.1.0/python3-lxc-3.0.4/setup.py
+--- lxc-3.1.0/python3-lxc-3.0.4/setup.py.omv~	2018-12-18 23:25:39.983905986 +0100
++++ lxc-3.1.0/python3-lxc-3.0.4/setup.py	2018-12-18 23:26:45.824787110 +0100
 @@ -59,6 +59,9 @@ class LxcBuildExtCommand(BuildExtCommand
          self.no_pkg_config = False
  

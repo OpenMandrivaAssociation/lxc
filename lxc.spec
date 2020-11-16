@@ -18,7 +18,7 @@
 
 Name:		lxc
 Version:	4.0.4
-Release:	1
+Release:	2
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
@@ -220,7 +220,7 @@ sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 %{_sysconfdir}/sysctl.d/99-lxc-oom.conf
 %{_sysconfdir}/lxc/default.conf
 /lib/systemd/system/lxc@.service
-%{_datadir}/bash-completion/completions/lxc
+#{_datadir}/bash-completion/completions/lxc
 %lang(ko) %{_mandir}/ko/*/*
 
 %files -n %{libname}

@@ -17,8 +17,8 @@
 %bcond_without	python
 
 Name:		lxc
-Version:	4.0.4
-Release:	2
+Version:	4.0.5
+Release:	1
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
@@ -37,7 +37,7 @@ Patch0:		lxc-templates-openmandriva.patch
 Patch3:		lxc-1.0.5-lua-linkage.patch
 Patch4:		lxc-3.1.0-python-linkage.patch
 BuildRequires:	docbook-utils
-BuildRequires:	kernel-headers
+BuildRequires:	kernel-release-headers
 BuildRequires:	cap-devel
 BuildRequires:	pkgconfig(libsystemd)
 Buildrequires:	docbook-dtd30-sgml

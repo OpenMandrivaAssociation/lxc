@@ -42,7 +42,7 @@ BuildRequires:	cap-devel
 BuildRequires:	pkgconfig(libsystemd)
 Buildrequires:	docbook-dtd30-sgml
 Buildrequires:	docbook2x
-BuildRequires:	bash-completion
+BuildRequires:	pkgconfig(bash-completion)
 %if %{with lua}
 Buildrequires:	lua-devel
 %endif

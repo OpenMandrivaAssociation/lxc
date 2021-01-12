@@ -1,5 +1,5 @@
 sources:
   lua-lxc-3.0.2.tar.gz: bb958257c86b70f9bde90c604f7fbe7de971d61f
-  lxc-4.0.5.tar.gz: 357d13be8bbf6513b7db7fd55adf834944eff735
   lxc-templates-3.0.4.tar.gz: 8a726151ff3fe0e51950783cccee39608fb4ccac
   python3-lxc-3.0.4.tar.gz: 1f1251146d7828d6d27080cd0730458c74fc6a34
+  lxc-4.0.6.tar.gz: 43b0bd4fe5a0409d9c790f308dc63172ba6c4ba8

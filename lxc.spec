@@ -5,20 +5,20 @@
 %define major 1
 %define libname %mklibname lxc %{major}
 %define develname %mklibname lxc -d
-%define debugcflags	%nil
-%define debug_package	%nil
+%define debugcflags %nil
+%define debug_package %nil
 
-%define luaver 5.3
+%define luaver 5.4
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 # disable it untill https://github.com/lxc/lxc/issues/174
 # not solved
-%bcond_without	lua
-%bcond_without	python
+%bcond_without lua
+%bcond_without python
 
 Name:		lxc
 Version:	4.0.6
-Release:	1
+Release:	2
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
@@ -206,8 +206,8 @@ sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
 %{_datadir}/lxc/hooks/*
 %{_datadir}/lxc/selinux/lxc.*
 %{_libdir}/lxc/rootfs/README
-%{_mandir}/man*/%{name}*
-%{_mandir}/ja/man*/*
+%doc %{_mandir}/man*/%{name}*
+%doc %{_mandir}/ja/man*/*
 %{_datadir}/%{name}/config/*.seccomp
 %{_datadir}/%{name}/config/*.conf
 %{_datadir}/lxc/lxc-patch.py

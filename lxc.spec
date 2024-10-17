@@ -23,7 +23,7 @@ Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
 Epoch:		1
-URL:		http://lxc.sourceforge.net
+URL:		https://lxc.sourceforge.net
 Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
 Source1:	http://linuxcontainers.org/downloads/%{name}-templates-3.0.4.tar.gz
 Source2:	http://linuxcontainers.org/downloads/lua-%{name}-3.0.2.tar.gz

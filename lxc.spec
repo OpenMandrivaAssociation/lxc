@@ -3,39 +3,25 @@
 %global _disable_ld_no_undefined 1
 
 %define major 1
-%define libname %mklibname lxc %{major}
+%define libname %mklibname lxc
+%define oldlibname %mklibname lxc 1
 %define develname %mklibname lxc -d
 %define debugcflags %nil
 %define debug_package %nil
 
-%define luaver 5.4
-%define lualibdir %{_libdir}/lua/%{luaver}
-%define luapkgdir %{_datadir}/lua/%{luaver}
-# disable it untill https://github.com/lxc/lxc/issues/174
-# not solved
-%bcond_without lua
-%bcond_without python
-
 Name:		lxc
-Version:	4.0.6
-Release:	3
+Version:	6.0.3
+Release:	1
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
-Epoch:		1
 URL:		https://lxc.sourceforge.net
-Source0:	http://linuxcontainers.org/downloads/%{name}-%{version}.tar.gz
-Source1:	http://linuxcontainers.org/downloads/%{name}-templates-3.0.4.tar.gz
-Source2:	http://linuxcontainers.org/downloads/lua-%{name}-3.0.2.tar.gz
-Source3:	http://linuxcontainers.org/downloads/python3-%{name}-3.0.4.tar.gz
+Source0:	http://linuxcontainers.org/downloads/lxc/%{name}-%{version}.tar.gz
 Source4:	%{name}.sh
 Source5:	dnsmasq-rule
 Source6:	ifcfg-lxcbr0
 Source7:	sysctl-rule
 Source100:	lxc.rpmlintrc
-Patch0:		lxc-templates-openmandriva.patch
-Patch3:		lxc-1.0.5-lua-linkage.patch
-Patch4:		lxc-3.1.0-python-linkage.patch
 BuildRequires:	docbook-utils
 BuildRequires:	kernel-release-headers
 BuildRequires:	cap-devel
@@ -68,6 +54,8 @@ Requires:	dnsmasq
 Conflicts:	lxc-doc < 0.7.5
 Obsoletes:	lxc-doc < 0.7.5
 
+BuildSystem:	meson
+
 %description
 The package "%{name}" provides the command lines to create and manage
 containers.  It contains a full featured container with the isolation
@@ -82,6 +70,8 @@ sshd.
 %package -n %{libname}
 Summary:	Library for LXC
 Group:		System/Libraries
+# Renamed 2025-02-26 before 6.0
+%rename %{oldlibname}
 
 %description -n %{libname}
 Library for the Linux Kernel Containers.
@@ -120,125 +110,30 @@ overhead of full virtualization.
 The python-%{name} package contains the Python3 binding for %{name}.
 %endif
 
-%prep
-%setup -a 1 -a 2 -a 3
-%autopatch -p1
-
-# Clang spews a few more warnings than gcc...
-sed -i -e 's,-Werror,,g' configure*
-
-[ -e autogen.sh ] && ./autogen.sh || autoreconf -fi
-cd lxc-templates-*
-[ -e autogen.sh ] && ./autogen.sh || autoreconf -fi
-cd ../lua-lxc-*
-[ -e autogen.sh ] && ./autogen.sh || autoreconf -fi
-
-%build
-%ifarch %ix86
-export CC=gcc
-export CXX=g++
-%endif
-
-%configure \
-		--disable-apparmor \
-		--with-init-script=systemd \
-		--with-distro=openmandriva \
-%if %{with lua}
-		--enable-lua \
-%endif
-%if %{with python}
-		--enable-python \
-%endif
-
-%make_build
-
-cd lxc-templates-*
-%configure
-%make_build
-
-cd ../lua-lxc-*
-%configure
-%make_build
-
-cd ..
-export PKG_CONFIG_PATH=`pwd`
-cd python3-lxc-*
-python setup.py build
-
-%install
-%make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
-cd lxc-templates-*
-%make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
-cd ../lua-lxc-*
-%make_install templatesdir=%{_datadir}/lxc/templates READMEdir=%{_libdir}/lxc/rootfs
-cd ../python3-lxc-*
-python setup.py install --skip-build --root=%{buildroot} --single-version-externally-managed --record=INSTALLED_FILES --optimize=1
-cd ..
-
-mkdir -p %{buildroot}/var/lib/%{name}
-mkdir -p %{buildroot}%{_sysconfdir}/dnsmasq.d/
-mkdir -p %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
-mkdir -p %{buildroot}%{_sysconfdir}/sysctl.d/
-install %{SOURCE4} %{buildroot}%{_sysconfdir}/dnsmasq.d/lxc
-install %{SOURCE5} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
-install %{SOURCE6} %{buildroot}%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
-
-# Fix up bogus pkgconfig files
-sed -i -e 's,\${prefix}//,/,g' %{buildroot}%{_libdir}/pkgconfig/*
-
 %files
-%doc %{_docdir}/%{name}
-%{_datadir}/%{name}/config/common.conf.d/README
-%{_sysconfdir}/default/%{name}
+%dir %{_sysconfdir}/lxc
+%config %{_sysconfdir}/lxc/default.conf
+%config %{_sysconfdir}/sysconfig/lxc
+%{_bindir}/init.lxc
 %{_bindir}/lxc-*
-%{_sbindir}/init.lxc
-%dir %{_libexecdir}/lxc
-%{_libexecdir}/lxc/lxc-*
-%dir %{_libexecdir}/lxc/hooks
-%{_libexecdir}/lxc/hooks/unmount-namespace
-%dir %{_datadir}/lxc
-%dir %{_datadir}/lxc/config
-%dir %{_datadir}/lxc/hooks
-%dir %{_datadir}/lxc/templates
-%dir %{_datadir}/lxc/selinux
-%dir %{_datadir}/lxc/config/common.conf.d
-%{_datadir}/lxc/templates/*
-%{_datadir}/lxc/hooks/*
-%{_datadir}/lxc/selinux/lxc.*
-%{_libdir}/lxc/rootfs/README
-%doc %{_mandir}/man*/%{name}*
-%doc %{_mandir}/ja/man*/*
-%{_datadir}/%{name}/config/*.seccomp
-%{_datadir}/%{name}/config/*.conf
-%{_datadir}/lxc/lxc-patch.py
-/var/lib/%{name}
-%{_datadir}/%{name}/%{name}.functions
-%{_sysconfdir}/dnsmasq.d/lxc
-%{_sysconfdir}/sysconfig/network-scripts/ifcfg-lxcbr0
-%{_unitdir}/lxc.service
+%{_unitdir}/lxc-monitord.service
 %{_unitdir}/lxc-net.service
-%{_sysconfdir}/sysctl.d/99-lxc-oom.conf
-%{_sysconfdir}/lxc/default.conf
+%{_unitdir}/lxc.service
 %{_unitdir}/lxc@.service
-%{_datadir}/bash-completion/completions/lxc
-%lang(ko) %{_mandir}/ko/*/*
-
-%files -n %{libname}
-%{_libdir}/lib%{name}.so.%{major}
-%{_libdir}/lib%{name}.so.%{major}.*
+%{_libexecdir}/lxc
+%{_libdir}/lxc
+%{_datadir}/lxc
+%{_datadir}/bash-completion/completions/*
+%doc %{_docdir}/lxc
+%lang(ja) %{_mandir}/ja/*/*.*
+%lang(ko) %{_mandir}/ko/*/*.*
+%{_mandir}/man?/*.*
 
 %files -n %{develname}
-%{_includedir}/%{name}/*.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%{_includedir}/lxc
+%{_libdir}/liblxc.so
+%{_libdir}/liblxc.a
+%{_libdir}/pkgconfig/lxc.pc
 
-%if %{with lua}
-%files -n lua-%{name}
-%{lualibdir}/%{name}
-%{luapkgdir}/%{name}.lua
-%endif
-
-%if %{with python}
-%files -n python-%{name}
-%{python3_sitearch}/*
-%endif
+%files -n %{libname}
+%{_libdir}/liblxc.so.1*

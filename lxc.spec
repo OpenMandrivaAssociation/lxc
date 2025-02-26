@@ -26,6 +26,7 @@ BuildRequires:	docbook-utils
 BuildRequires:	kernel-release-headers
 BuildRequires:	cap-devel
 BuildRequires:	pkgconfig(libsystemd)
+BuildRequires:	pkgconfig(dbus-1)
 Buildrequires:	docbook-dtd30-sgml
 Buildrequires:	docbook2x
 BuildRequires:	pkgconfig(bash-completion)

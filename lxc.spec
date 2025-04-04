@@ -10,7 +10,7 @@
 %define debug_package %nil
 
 Name:		lxc
-Version:	6.0.3
+Version:	6.0.4
 Release:	1
 Summary:	Linux Containers
 Group:		System/Kernel and hardware

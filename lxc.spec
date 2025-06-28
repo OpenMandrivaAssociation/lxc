@@ -73,7 +73,7 @@ Summary:	Library for LXC
 Group:		System/Libraries
 # Renamed 2025-02-26 before 6.0
 Obsoletes:	%{oldlibname} < %{EVRD}
-%rename %{oldlibname}
+#rename %{oldlibname}
 
 %description -n %{libname}
 Library for the Linux Kernel Containers.

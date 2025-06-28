@@ -11,12 +11,12 @@
 
 Name:		lxc
 Version:	6.0.4
-Release:	1
+Release:	2
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
 URL:		https://lxc.sourceforge.net
-Source0:	http://linuxcontainers.org/downloads/lxc/%{name}-%{version}.tar.gz
+Source0:	https://linuxcontainers.org/downloads/lxc/%{name}-%{version}.tar.gz
 Source4:	%{name}.sh
 Source5:	dnsmasq-rule
 Source6:	ifcfg-lxcbr0
@@ -27,15 +27,15 @@ BuildRequires:	kernel-release-headers
 BuildRequires:	cap-devel
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(dbus-1)
-Buildrequires:	docbook-dtd30-sgml
-Buildrequires:	docbook2x
+BuildRequires:	docbook-dtd30-sgml
+BuildRequires:	docbook2x
 BuildRequires:	pkgconfig(bash-completion)
 %if %{with lua}
-Buildrequires:	lua-devel
+BuildRequires:	lua-devel
 %endif
 %if %{with python}
-Buildrequires:	pkgconfig(python3)
-Buildrequires:	python-setuptools
+BuildRequires:	pkgconfig(python3)
+BuildRequires:	python-setuptools
 %endif
 # needed for lxc-busybox
 #Requires:	busybox
@@ -51,6 +51,7 @@ Requires:	bridge-utils
 # for lxcbr0
 Requires:	iptables
 Requires:	dnsmasq
+Requires:	%{libname} = %{EVRD}
 
 Conflicts:	lxc-doc < 0.7.5
 Obsoletes:	lxc-doc < 0.7.5
@@ -72,6 +73,8 @@ sshd.
 Summary:	Library for LXC
 Group:		System/Libraries
 # Renamed 2025-02-26 before 6.0
+Obsoletes:	%{_lib}lxc1-4.0.6-2 = %{EVRD}
+Obsoletes:	%{libname} < %{EVRD}
 %rename %{oldlibname}
 
 %description -n %{libname}

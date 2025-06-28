@@ -72,8 +72,9 @@ sshd.
 Summary:	Library for LXC
 Group:		System/Libraries
 # Renamed 2025-02-26 before 6.0
-Obsoletes:	%{oldlibname} < %{EVRD}
-#rename %{oldlibname}
+Obsoletes:	%{_lib}lxc1-4.0.6-2 = %{EVRD}
+Obsoletes:	%{libname} < %{EVRD}
+%rename %{oldlibname}
 
 %description -n %{libname}
 Library for the Linux Kernel Containers.

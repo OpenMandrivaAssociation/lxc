@@ -51,6 +51,7 @@ Requires:	bridge-utils
 # for lxcbr0
 Requires:	iptables
 Requires:	dnsmasq
+Requires:	%{libname} = %{EVRD}
 
 Conflicts:	lxc-doc < 0.7.5
 Obsoletes:	lxc-doc < 0.7.5

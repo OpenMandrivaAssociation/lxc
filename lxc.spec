@@ -25,6 +25,7 @@ Source100:	lxc.rpmlintrc
 BuildRequires:	docbook-utils
 BuildRequires:	kernel-release-headers
 BuildRequires:	cap-devel
+BuildRequires:  seccomp-devel
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	docbook-dtd30-sgml

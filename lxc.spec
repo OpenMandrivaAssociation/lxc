@@ -11,7 +11,7 @@
 
 Name:		lxc
 Version:	6.0.4
-Release:	2
+Release:	3
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
@@ -25,6 +25,7 @@ Source100:	lxc.rpmlintrc
 BuildRequires:	docbook-utils
 BuildRequires:	kernel-release-headers
 BuildRequires:	cap-devel
+BuildRequires:  seccomp-devel
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	docbook-dtd30-sgml

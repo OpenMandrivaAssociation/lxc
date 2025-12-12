@@ -11,7 +11,7 @@
 
 Name:		lxc
 Version:	6.0.4
-Release:	3
+Release:	4
 Summary:	Linux Containers
 Group:		System/Kernel and hardware
 License:	LGPLv2
